@@ -1,0 +1,181 @@
+#+TITLE: DINING HALL SERVER
+#+AUTHOR: FCIM FAF 203 Cius Iurie
+
+** INSTALLATION
+
+In order to run the docker servers using =docker compose= do the following steps:
+
+*** Linux/Unix
+
+1. Open your terminal and paste:
+
+  #+begin_src bash
+  $ mkdir restaurant-simulator
+
+  $ git clone https://github.com/IuraCPersonal/dining-hall-component restaurant-simulator/dining-hall-component
+  $ git clone https://github.com/IuraCPersonal/kitchen-component restaurant-simulator/kitchen-component
+
+  $ cd restaurant-simulator
+  $ touch docker-compose.yml
+  #+end_src
+
+2. Paste the following into the =docker-compose.yml= file.
+
+  #+begin_src yml
+  version: '3'
+
+  services:
+    kitchen:
+      build: ./kitchen-component
+      ports:
+        - "3000:3000"
+      environment:
+        - USING_DOCKER_COMPOSE=1
+    dining-hall:
+      build: ./dining-hall-component
+      ports: 
+        - "8080:8080"
+      environment:
+        - USING_DOCKER_COMPOSE=1
+  #+end_src
+
+3. Start the Docker service:
+
+  #+begin_src bash
+  $ sudo systemctl start docker
+  #+end_src
+
+4. Then run the command:
+
+  #+begin_src bash
+  $ sudo docker compose up --build
+  #+end_src
+
+*** Windows
+
+1. Create a folder =restaurant-simulator=.
+2. Open a Terminal/Git Bash in that folder.
+3. Paste the following line by line:
+
+    #+begin_src bash
+        $ git clone https://github.com/IuraCPersonal/dining-hall-component dining-hall-component
+        $ git clone https://github.com/IuraCPersonal/kitchen-component kitchen-component
+    #+end_src
+
+4. Create a new file =docker-compose.yml= in the =restaurant-simulator= folder.
+5. Add the following to the previously created file:
+
+    #+begin_src bash
+    version: '3'
+
+    services:
+      kitchen:
+	build: ./kitchen-component
+	ports:
+	  - "3000:3000"
+	environment:
+	  - USING_DOCKER_COMPOSE=1
+      dining-hall:
+	build: ./dining-hall-component
+	ports: 
+	  - "8080:8080"
+	environment:
+	  - USING_DOCKER_COMPOSE=1
+     #+end_src
+
+6. Make sure to have =Docker Desktop= started.
+7. Run
+
+    #+begin_src bash
+    $ docker-compose up --build
+    #+end_src
+
+** ABOUT
+
+The =Dining hall= has a finite amount of =tables= that "clients" can occupy. For simplicity's sake, at any given time a table can have only one order, thus if a restaurant has 6 tables occupied from total number of 10 tables , it can at most have 6 orders.
+
+Main work unit of the =Dining hall= are =waiters= (which are a bit counter intuitively named) that take orders from the tables (clients).
+
+The purpose of waiters is to "find" orders . Restaurant has limited number of waiters and is less than number of tables . For example at restaurant with 10 tables we can have 4-5 waiters.
+
+*** RESTAURANT MENU
+
+=Tables= (clients) generates orders based on restaurant menu. Menu consist of foods. Foods used in our simulation are given in the list bellow:
+
++ pizza
+
+#+begin_src js
+{
+    "id": 1,
+    "name": "pizza",
+    "preparation-time": 20 ,
+    "complexity": 2 ,
+    "cooking-apparatus": "oven"
+}
+#+end_src
+
++ salad
+
+#+begin_src js
+{
+    "id": 2,
+    "name": "salad",
+    "preparation-time": 10 ,
+    "complexity": 1 ,
+    "cooking-apparatus": null
+}
+#+end_src
+
+Check =modules.py= for the full list.
+
+*** ORDER
+
+=Tables= (clients) generates orders . An order should contain the following information:
+
++ unique order id
++ one or more menu items where the items indicate the ids of the menu items.
++ the priority of the order (where it ranges from 1 to 5 , 1 being the smallest priority, and 5 - with the highest one)
++ maximum wait time that a client is willing to wait for its order and it should be calculated by taking the item with the highest
++ preparation-time from the order and multiply it by 1.3.
+
+An example of an order:
+
+#+begin_src js
+{
+    "id": 1,
+    "items": [ 3, 4, 4, 2 ],
+    "priority": 3 ,
+    "max_wait": 45
+}
+#+end_src
+
+*The timer of an order starts from the moment it's created.*
+
+Order has to be picked up by a waiter. The time it takes for a waiter varies, and I would say that a time between 2 and 4 should be realistic enough.
+
+** MORE DETAILS
+
+The Dinning Hall consists of =tables= and =waiters=. You have to design a mechanism which will simulate tables occupation. At start of simulation, tables should not be totally occupied and you have to take into a count that it takes time for a table to be occupied after it was vacated.
+
+In the Dinning Hall you should have a collection(array) of =tables=. Tables should be a dedicated objects. Each table should have a state of:
+
++ being free
++ waiting to make a order
++ waiting for a order to be served
+
+=Waiters= should be an object instances which run their logic of serving tables on separate =threads=, one thread per =waiter=. Waiters should look for tables which was not served, meaning that order was not picked up yet. For Waiters which are running on separate threads , tables are shared resource. Waiters are looking in the collection of tables for such table which is ready to make a order. When waiter is picking up the order from a table , it(table) should generate a random order with random foods and random number of foods, random priority and unique order ID.
+
+Number of =tables= and =waiters= should be configurable.
+
+After picking up an order , don't forget that this operation takes some amount of time. =Waiter= have to send order to kitchen by performing =HTTP= (POST) request, with order details.
+
+When order will be ready, =kitchen= will send a HTTP (POST) request back to =Dinning Hall=. Your Dinning Hall server has to handle that request and to notify waiter that order is ready to be served to the table which requested this order. Your task here is to design a mechanism for serving prepared orders to tables . The order should be served to the table by the waiter which picked up that specific order. When =order= is served table should check that served order is the same order what was requested.
+
+** LINKS
+
+- [[https://github.com/IuraCPersonal/network-programming][Main Repository]]
+- [[https://github.com/IuraCPersonal/kitchen-component][The Kitchen Server]]
+
+** CONTACT
+
+If you have any question, please contact me through email: =iurie.cius@isa.utm.md=.
