@@ -1,3 +1,4 @@
+# Import required libraries.
 import time
 import requests
 import json
@@ -8,15 +9,19 @@ from modules import *
 from threading import Thread
 from flask import Flask, request
 
+# Setup Flask and other dependencies.
 app = Flask(__name__)
 order_indexer = Counter()
 
+# Disable Flask console messages.
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+# Map the table_id with it's status.
 table_status = dict([(table['id'], table['status']) for table in TABLES])
 
 
+# Create the 'distribution' endpoint.
 @app.route('/distribution', methods=['POST'])
 def distribution():
     content = request.get_json()
@@ -28,7 +33,7 @@ def distribution():
 
     return json.dumps({'success': True}), 200
 
-
+# Extend Thread class to create Threads for the Tables.
 class Table(Thread):
     def __init__(self, table_id, *args, **kwargs):
         super(Table, self).__init__(*args, **kwargs)
@@ -44,22 +49,22 @@ class Table(Thread):
             json={
                 'order_id': order_id,
                 'table_id': self.table_id,
-                'items': items
+                'items': items,
+                'pick_up_time': time.time()
             }
         )
 
         Format.log(
             f'Table {self.table_id} has made order No. {order_id}')
 
+    # Override the run() function of Thread class.
     def run(self):
         while True:
             if table_status[self.table_id] == WAITING:
                 time.sleep(0.25 * TIME_UNIT)
                 continue
 
-            table_waiting_time = random.randint(2, 6) * TIME_UNIT
-
-            time.sleep(table_waiting_time)
+            time.sleep(random.randint(2, 10) * TIME_UNIT)
             self.generate_order()
 
 
@@ -74,7 +79,7 @@ if __name__ == '__main__':
             use_reloader=False
         ))
     )
-
+    
     for index in range(1, AMOUNT_OF_TABLES + 1):
         table = Table(index)
         threads.append(table)
