@@ -33,6 +33,11 @@ TABLES = [
         "id": 4,
         "status": FREE,
         "order": None
+    },
+    {
+        "id": 5,
+        "status": FREE,
+        "order": None
     }
 ]
 
@@ -161,9 +166,9 @@ class Format:
 
     @staticmethod
     def log(text):
-        print(f'{Format.__red} DINING HALL : {text}')
+        print(f'{Format.__red} DH : {text}')
 
-
+# Thread-Safe Counter.
 class Counter:
     def __init__(self, start=0):
         self.lock = threading.Lock()
