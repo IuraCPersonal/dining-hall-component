@@ -1,18 +1,19 @@
 import logging
 
-from app.Table import Table
-from app.Waiter import Waiter
-
-from app.modules import *
 from flask import Flask
 from threading import Thread
 
-# Setup Flask and other dependencies.
-app = Flask(__name__)
+from app.modules import *
+from app.Table import Table
+from app.Waiter import Waiter
+
 
 # Disable Flask console messages.
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
+
+# Setup Flask and other dependencies.
+app = Flask(__name__)
 
 from app import routes
 

@@ -1,5 +1,5 @@
 import queue
-from app.helpers.SafeCounter import SafeCounter
+from app.helpers.Counter import Counter
 
 TIME_UNIT = 1
 
@@ -8,14 +8,15 @@ DINING_HALL_PORT = 8080
 KITCHEN_PORT = 3000
 KITCHEN_HOSTNAME = "localhost"
 
-AMOUNT_OF_TABLES = 5
-NUMBER_OF_WAITERS = 8
+AMOUNT_OF_TABLES = 10
+NUMBER_OF_WAITERS = 4
 
 # Create a Thread-Safe Queue
 threads = dict()
-order_indexer = SafeCounter()
-order_queue = queue.Queue()
 reputation_system = []
+
+order_indexer = Counter()
+order_queue = queue.Queue()
 
 FOOD = {
     1: {
