@@ -9,47 +9,33 @@ In order to run the docker servers using =docker compose= do the following steps
 
 1. Open your terminal and paste:
 
-  #+begin_src bash
-  $ mkdir restaurant-simulator
+#+begin_src bash
+mkdir restaurant-simulator
 
-  $ git clone https://github.com/IuraCPersonal/dining-hall-component restaurant-simulator/dining-hall-component
-  $ git clone https://github.com/IuraCPersonal/kitchen-component restaurant-simulator/kitchen-component
+git clone https://github.com/IuraCPersonal/dining-hall-component restaurant-simulator/dining-hall-component
+git clone https://github.com/IuraCPersonal/kitchen-component restaurant-simulator/kitchen-component
 
-  $ cd restaurant-simulator
-  $ touch docker-compose.yml
-  #+end_src
+cd restaurant-simulator
+touch docker-compose.yml
+#+end_src
 
 2. Paste the following into the =docker-compose.yml= file.
 
-  #+begin_src yml
-  version: '3'
-
-  services:
-    kitchen:
-      build: ./kitchen-component
-      ports:
-        - "3000:3000"
-      environment:
-        - USING_DOCKER_COMPOSE=1
-    dining-hall:
-      build: ./dining-hall-component
-      ports: 
-        - "8080:8080"
-      environment:
-        - USING_DOCKER_COMPOSE=1
-  #+end_src
+#+begin_src yml
+To be added for the second laboratory work...
+#+end_src
 
 3. Start the Docker service:
 
-  #+begin_src bash
-  $ sudo systemctl start docker
-  #+end_src
+#+begin_src bash
+sudo systemctl start docker
+#+end_src
 
 4. Then run the command:
 
-  #+begin_src bash
-  $ sudo docker compose up --build
-  #+end_src
+#+begin_src bash
+sudo docker compose up --build
+#+end_src
 
 *** Windows
 
@@ -57,38 +43,24 @@ In order to run the docker servers using =docker compose= do the following steps
 2. Open a Terminal/Git Bash in that folder.
 3. Paste the following line by line:
 
-    #+begin_src bash
-        $ git clone https://github.com/IuraCPersonal/dining-hall-component dining-hall-component
-        $ git clone https://github.com/IuraCPersonal/kitchen-component kitchen-component
-    #+end_src
+#+begin_src bash
+git clone https://github.com/IuraCPersonal/dining-hall-component dining-hall-component
+git clone https://github.com/IuraCPersonal/kitchen-component kitchen-component
+#+end_src
 
 4. Create a new file =docker-compose.yml= in the =restaurant-simulator= folder.
 5. Add the following to the previously created file:
 
-    #+begin_src bash
-    version: '3'
-
-    services:
-      kitchen:
-	build: ./kitchen-component
-	ports:
-	  - "3000:3000"
-	environment:
-	  - USING_DOCKER_COMPOSE=1
-      dining-hall:
-	build: ./dining-hall-component
-	ports: 
-	  - "8080:8080"
-	environment:
-	  - USING_DOCKER_COMPOSE=1
-     #+end_src
+#+BEGIN_SRC yml
+To be added for the second laboratory work...
+#+END_SRC
 
 6. Make sure to have =Docker Desktop= started.
 7. Run
 
-    #+begin_src bash
-    $ docker-compose up --build
-    #+end_src
+#+begin_src bash
+docker-compose up --build
+#+end_src
 
 ** ABOUT
 
@@ -170,6 +142,103 @@ Number of =tables= and =waiters= should be configurable.
 After picking up an order , don't forget that this operation takes some amount of time. =Waiter= have to send order to kitchen by performing =HTTP= (POST) request, with order details.
 
 When order will be ready, =kitchen= will send a HTTP (POST) request back to =Dinning Hall=. Your Dinning Hall server has to handle that request and to notify waiter that order is ready to be served to the table which requested this order. Your task here is to design a mechanism for serving prepared orders to tables . The order should be served to the table by the waiter which picked up that specific order. When =order= is served table should check that served order is the same order what was requested.
+
+** Dinning Hall V2 routes
+
+#+BEGIN_SRC js
+Endpoint: /v2/order
+Method: POST
+Payload:
+{
+  "items": [ 1, 4, 2 ],
+  "priority": 3,
+  "max_wait": 45,
+  "created_time": 1631453140 // UNIX timestamp
+}
+
+Response:
+{
+  "restaurant_id": 1,
+  "order_id": 1,
+  "estimated_waiting_time": 75,
+  "created_time": 1631453140 // UNIX timestamp,
+  "registered_time": 1631454560 // UNIX timestamp
+}
+#+END_SRC
+
+#+BEGIN_SRC js
+Endpoint: /v2/order/{id}
+Method: GET
+//In case order was not yet prepare
+Response:
+{
+"order_id": 1,
+"is_ready": false,
+"estimated_waiting_time": 15, // Estimated time until order will be prepared
+"priority": 3,
+"max_wait": 45,
+"created_time": 1631453140, // UNIX timestamp,
+"registered_time": 1631454560, // UNIX timestamp
+"prepared_time": 0, // UNIX timestamp
+"cooking_time": 0,
+"cooking_details": null
+}
+//In case order is ready
+Response:
+{
+  "order_id": 1,
+  "is_ready": true,
+  "estimated_waiting_time": 0,
+  "priority": 3,
+  "max_wait": 45,
+  "created_time": 1631453140 // UNIX timestamp,
+  "registered_time": 1631454560 // UNIX timestamp
+  "prepared_time": 1631453140 // UNIX timestamp
+  "cooking_time": 65
+  "cooking_details": [
+    {
+    "food_id": 3,
+    "cook_id": 1,
+    },
+    {
+    "food_id": 4,
+    "cook_id": 1,
+    },
+    {
+    "food_id": 4,
+    "cook_id": 2,
+    },
+    {
+    "food_id": 2,
+    "cook_id": 3,
+    },
+  ]
+#+END_SRC
+
+#+BEGIN_SRC js
+Endpoint: /v2/rating
+Method: POST
+Payload:
+{
+  "order_id": 1,
+  "rating": 3,
+  "estimated_waiting_time": 75,
+  "waiting_time": 85
+}
+Response:
+{
+  "restaurant_id": 1,
+  "restaurant_avg_rating": 4,44,
+  "prepared_orders": 42 // Total number of orders preapred by resturant.
+}
+#+END_SRC
+
+** TEST CONFIGURATION
+
+For all restaurants in dinning hall you have to have:
+
+- 6 TABLES
+- 3 WAITERS
 
 ** LINKS
 
