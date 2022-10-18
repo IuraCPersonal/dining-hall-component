@@ -12,8 +12,7 @@ In order to run the docker servers using =docker compose= do the following steps
 #+begin_src bash
 mkdir restaurant-simulator
 
-git clone https://github.com/IuraCPersonal/dining-hall-component restaurant-simulator/dining-hall-component
-git clone https://github.com/IuraCPersonal/kitchen-component restaurant-simulator/kitchen-component
+I will add the links after I configure everything.
 
 cd restaurant-simulator
 touch docker-compose.yml
@@ -44,8 +43,7 @@ sudo docker compose up --build
 3. Paste the following line by line:
 
 #+begin_src bash
-git clone https://github.com/IuraCPersonal/dining-hall-component dining-hall-component
-git clone https://github.com/IuraCPersonal/kitchen-component kitchen-component
+I will add the links after I configure everything.
 #+end_src
 
 4. Create a new file =docker-compose.yml= in the =restaurant-simulator= folder.
