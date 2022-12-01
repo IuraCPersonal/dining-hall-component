@@ -1,0 +1,103 @@
+{
+    "restaurants": {
+        "1": {
+            "restaurant_id": 1,
+            "name": "The Aviary",
+            "host-name": "0.0.0.0",
+            "address": "localhost:1111",
+            "dining-port": "1010",
+            "kitchen-port": "1111",
+            "menu_items": 4,
+            "menu": {
+                "1": {
+                    "id": 1,
+                    "name": "Pizza",
+                    "preparation-time": 20,
+                    "complexity": 2,
+                    "cooking-apparatus": "oven"
+                },
+                "2": {
+                    "id": 2,
+                    "name": "Salad",
+                    "preparation-time": 10,
+                    "complexity": 1,
+                    "cooking-apparatus": null
+                },
+                "3": {
+                    "id": 3,
+                    "name": "Zeama",
+                    "preparation-time": 7,
+                    "complexity": 1,
+                    "cooking-apparatus": "stove"
+                },
+                "4": {
+                    "id": 4,
+                    "name": "Gyros",
+                    "preparation-time": 5,
+                    "complexity": 1,
+                    "cooking-apparatus": null
+                }
+            }
+        },
+        "2": {
+            "restaurant_id": 2,
+            "name": "Cibo Matto",
+            "host-name": "0.0.0.0",
+            "address": "localhost:2222",
+            "dining-port": "2020",
+            "kitchen-port": "2222",
+            "menu_items": 7,
+            "menu": {
+                "1": {
+                    "id": 1,
+                    "name": "Scallop Sashimi with Meyer Lemon Confit",
+                    "preparation-time": 32,
+                    "complexity": 3,
+                    "cooking-apparatus": null
+                },
+                "2": {
+                    "id": 2,
+                    "name": "Island Duck with Mulberry Mustard",
+                    "preparation-time": 35,
+                    "complexity": 3,
+                    "cooking-apparatus": "oven"
+                },
+                "3": {
+                    "id": 3,
+                    "name": "Waffles",
+                    "preparation-time": 10,
+                    "complexity": 1,
+                    "cooking-apparatus": "stove"
+                },
+                "4": {
+                    "id": 4,
+                    "name": "Aubergine",
+                    "preparation-time": 20,
+                    "complexity": 2,
+                    "cooking-apparatus": "oven"
+                },
+                "5": {
+                    "id": 5,
+                    "name": "Lasagna",
+                    "preparation-time": 30,
+                    "complexity": 2,
+                    "cooking-apparatus": "oven"
+                },
+                "6": {
+                    "id": 6,
+                    "name": "Burger",
+                    "preparation-time": 15,
+                    "complexity": 1,
+                    "cooking-apparatus": "stove"
+                },
+                "7": {
+                    "id": 7,
+                    "name": "Gyros",
+                    "preparation-time": 15,
+                    "complexity": 1,
+                    "cooking-apparatus": null
+                }
+            }
+        }
+    }
+}
