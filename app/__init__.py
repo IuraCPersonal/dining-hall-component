@@ -1,4 +1,4 @@
-import logging
+import logging, requests, sys
 
 from flask import Flask
 from threading import Thread
@@ -12,10 +12,26 @@ from app.Waiter import Waiter
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+cli = sys.modules['flask.cli']
+cli.show_server_banner = lambda *x: None
+
+
 # Setup Flask and other dependencies.
 app = Flask(__name__)
 
+
 from app import routes
+
+
+# Register each Restaurant to the Food Ordering Service.
+try:
+    _ = requests.post(
+        url=f'http://food-ordering:{FOOD_ORDERING_PORT}/register',
+        json=restaurants.get(RESTAURANT_ID)
+    )
+except KeyError:
+    pass
+
 
 threads['Flask'] = (
     Thread(
